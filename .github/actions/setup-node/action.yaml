@@ -1,0 +1,13 @@
+---
+name: "Setup NodeJS"
+description: "Sets up NodeJS for the Arene Vertex VSCode plugin"
+runs:
+  using: "composite"
+  steps:
+    - name: Install NodeJS
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+    - name: Install NodeJS modules
+      shell: bash
+      run: npm install

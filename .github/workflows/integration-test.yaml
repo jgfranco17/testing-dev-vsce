@@ -1,0 +1,24 @@
+---
+name: Integration Test
+
+"on":
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  plugin-integration-test:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: ./.github/actions/setup-node
+
+      - name: Run integration tests
+        uses: ./.github/actions/run-test
