@@ -1,0 +1,49 @@
+{
+  "name": "testing-dev-vsce",
+  "displayName": "testing-dev-vsce",
+  "description": "Helper extension for executing testing",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.92.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "testing-dev-vsce.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jgfranco/testing-dev-vsce"
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "rm -rf ./out && tsc -p ./",
+    "watch": "rm -rf ./out && mkdir ./out && tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "coverage": "c8 --check-coverage npm run test",
+    "package": "vsce package --baseContentUrl $(jq -r .repository.url package.json) --baseImagesUrl $(jq -r .repository.url package.json) --out testing-dev-vsce.vsix"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.92.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3",
+    "@vscode/test-cli": "^0.0.8",
+    "@vscode/test-electron": "^2.3.9"
+  }
+}
