@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
   };
 
   // Register the command
-  let identifyAct = vscode.commands.registerCommand(
+  const identifyAct = vscode.commands.registerCommand(
     "vulcanbox.identifyFile",
     () => {
       identifyActiveFile();
@@ -33,7 +33,7 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.window.onDidChangeActiveTextEditor(() => {
     identifyActiveFile();
   });
-  let verification = vscode.commands.registerCommand(
+  const verification = vscode.commands.registerCommand(
     "testing-dev-vsce.helloWorld",
     () => {
       // The code you place here will be executed every time your command is executed

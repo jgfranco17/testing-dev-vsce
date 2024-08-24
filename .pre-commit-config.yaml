@@ -8,9 +8,8 @@ repos:
     rev: v4.3.0
     hooks:
       - id: trailing-whitespace
-        exclude: .woven/
       - id: end-of-file-fixer
-        exclude: ^(.woven|src/test/resources/stepsDocs)/
+        exclude: ^(.src/test/resources)/
       - id: check-yaml
       - id: check-added-large-files
       - id: check-shebang-scripts-are-executable
