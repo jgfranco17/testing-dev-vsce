@@ -5,6 +5,7 @@ import {
   updateStatusBar,
   interactiveWindow,
 } from "./app/displayTooling";
+import { checkPytest } from "./app/pytestUtils";
 import { registerExtensionCommand } from "./registration";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -33,9 +34,13 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // Subscribe to active editor changes
-  vscode.window.onDidChangeActiveTextEditor(() => {
-    identifyActiveFile();
-    copyPathToCurrentFile(statusBarItem);
+  vscode.window.onDidChangeActiveTextEditor((editor) => {
+    if (editor) {
+      const document = editor.document;
+      identifyActiveFile();
+      copyPathToCurrentFile(statusBarItem);
+      checkPytest(document);
+    }
   });
   const greeting = registerExtensionCommand("greet", () => {
     vscode.window.showInformationMessage("Hello World from testing-dev-vsce!");
