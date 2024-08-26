@@ -19,6 +19,10 @@
       {
         "command": "testing-dev-vsce.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "testing-dev-vsce.runPytest",
+        "title": "Run Pytest files"
       }
     ]
   },

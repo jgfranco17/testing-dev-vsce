@@ -46,7 +46,7 @@ function findPytestFunctions(text: string): string[] {
   return pytestFunctions;
 }
 
-function runPytestOnFile(filepath: string): void {
+export function runPytestOnFile(filepath: string): void {
   let terminal = vscode.window.terminals.find((t) => t.name === EXTENSION_NAME);
   if (!terminal) {
     // If no existing terminal is found, create a new one

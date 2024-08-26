@@ -1,11 +1,6 @@
 import * as vscode from "vscode";
-import {
-  identifyActiveFile,
-  copyPathToCurrentFile,
-  updateStatusBar,
-  interactiveWindow,
-} from "./app/displayTooling";
-import { checkPytest } from "./app/pytestUtils";
+import { identifyActiveFile, updateStatusBar } from "./app/displayTooling";
+import { checkPytest, runPytestOnFile } from "./app/testRunner";
 import { registerExtensionCommand } from "./registration";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -14,13 +9,11 @@ export function activate(context: vscode.ExtensionContext) {
   );
   // Create a status bar item
   const statusBarItem = vscode.window.createStatusBarItem(
-    vscode.StatusBarAlignment.Left,
-    100
+    vscode.StatusBarAlignment.Right,
+    1000
   );
-  statusBarItem.tooltip = "Click to copy file path";
+  statusBarItem.tooltip = "Click to run tests";
   statusBarItem.show();
-
-  // Also update the status bar when the extension is activated
   updateStatusBar(statusBarItem);
 
   const identifyFile = registerExtensionCommand(
@@ -28,17 +21,21 @@ export function activate(context: vscode.ExtensionContext) {
     identifyActiveFile
   );
 
-  const showMessageCommand = registerExtensionCommand(
-    "showInfoMessage",
-    interactiveWindow
-  );
+  const runPytest = registerExtensionCommand("runPytest", () => {
+    const editor = vscode.window.activeTextEditor;
+    updateStatusBar(statusBarItem);
+    if (editor) {
+      const filePath = editor.document.uri.fsPath;
+      runPytestOnFile(filePath);
+    }
+  });
 
   // Subscribe to active editor changes
   vscode.window.onDidChangeActiveTextEditor((editor) => {
     if (editor) {
       const document = editor.document;
       identifyActiveFile();
-      copyPathToCurrentFile(statusBarItem);
+      updateStatusBar(statusBarItem);
       checkPytest(document);
     }
   });
@@ -46,25 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage("Hello World from testing-dev-vsce!");
   });
 
-  const copyPath = registerExtensionCommand("copyFilePath", () => {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-      const document = editor.document;
-      const filePath = document.uri.fsPath;
-
-      // Copy the file path to the clipboard
-      vscode.env.clipboard.writeText(filePath).then(() => {
-        vscode.window.showInformationMessage("File path copied to clipboard!");
-      });
-    }
-  });
-  context.subscriptions.push(
-    statusBarItem,
-    identifyFile,
-    greeting,
-    copyPath,
-    showMessageCommand
-  );
+  context.subscriptions.push(statusBarItem, identifyFile, greeting, runPytest);
 }
 
 // This method is called when your extension is deactivated
